@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Feb 14 23:41:23 2021
-
-@author: chris
-"""
-
 import docx2txt
 from termcolor import colored
 import tkinter
@@ -57,7 +50,9 @@ for gram in allNgramsStrings:
     gramsDict[gram] = count
 
 df = pd.DataFrame(list(gramsDict.items()),columns = ['Grams','Count'])
-df['String_Lengths'] = len(df['Grams'])
-df.sort_values((['String_Lengths']),ascending=False )
+df = df[df['Count'] > 1]
+
+df['String_Lengths'] = df['Grams'].str.len()
+df.sort_values( by = 'String_Lengths',  ascending=False)
 print(df)
 df.to_excel('nGrams.xlsx')
