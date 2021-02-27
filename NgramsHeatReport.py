@@ -35,18 +35,25 @@ def ngrams(lst, n):
       break    
   
 
-n = 4
+n = 1
 
-gramsD = dict(Counter(ngrams(words, n)))
-gramsD = {value:key for key, value in gramsD.items()}
-gramsD = {key: list(value) for key, value in gramsD.items()}
+while True:
 
-    
-dict(sorted(gramsD.items(), reverse=True))
+    gramsD = dict(Counter(ngrams(words, n)))
+    gramsD = {value:key for key, value in gramsD.items()}
+    gramsD = {key: list(value) for key, value in gramsD.items()}
 
-keys = list(gramsD.keys())
-values = list(gramsD.values())
-values = [' '.join(strings) for strings in values]
+    keys = list(gramsD.keys())
+    values = list(gramsD.values())
+    values = [' '.join(strings) for strings in values]
 
-gramsDJoin = dict(zip(keys, values)) 
-gramsDJoin
+    gramsDJoin = dict(zip(keys, values)) 
+
+    gramsDJoin  = dict(sorted(gramsDJoin.items(), reverse=True))
+
+    for key, value in gramsDJoin.items():
+        if key > 1:
+            print(f"{key}:  {value}")
+            print("\n")
+            
+    n = n +1
