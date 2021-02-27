@@ -1,58 +1,99 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Feb 16 15:59:48 2021
+
+@author: chris
+"""
+
+from itertools import tee, islice
 import docx2txt
+from collections import Counter
+import re
 from termcolor import colored
-import tkinter
-from tkinter import filedialog
-from nltk.util import everygrams
-import pprint
-import pandas as pd
+from functools import reduce
+import nltk
+nltk.download('punkt')
 
-pp = pprint.PrettyPrinter(indent=4)
-
-# root = tkinter.Tk()
-# root.wm_withdraw() # this completely hides the root window
-# file = filedialog.askopenfilename()
-
-file = r"C:\Users\chris\Desktop\RepStrindsGroups\Dossier_Emitentes_V2.docx"
+file = r"C:\Users\chris\Documents\Transgola\Clients\PROJECTS\2021\385240221_TM_HS\Orignals\COPY_Caracterização da vegetação ao longo das futuras linhas de transmissão de energia Lubango.docx"
 
 text = docx2txt.process(file)
-# print(text)
+words = nltk.word_tokenize(text)
 
 paras = text.split('\n')
-
 paras = [x for x in paras if x]
+paras = [p.replace('\t', '') for p in paras]
+parasSplit = [p.split(' ') for p in paras]
 
 
-allNgrams = []
-
+pLengths = []
 for p in paras:
-    p_split = p.split()
-    allNgrams.append(list(everygrams(p_split)))
+    pLengths.append(len(p))
     
+pLengths.sort(reverse = True)
+
+
+def ngrams(lst, n):
+  tlst = lst
+  while True:
+    a, b = tee(tlst)
+    l = tuple(islice(a, n))
+    if len(l) == n:
+      yield l
+      next(b)
+      tlst = b
+    else:
+      break    
+  
+
+
+n = 3
+
+
+gramsDall= []
+
+
     
-# for grams in allNgrams:
-#     print(grams) 
-#     print('\n')
-#     print('\n')
-
-allNgramsList = []
-
-for phrase in allNgrams:
-    for gram in phrase:
-        allNgramsList.append(list(gram))
+for p in parasSplit: 
+    gramsD = dict(Counter(ngrams(p, n)))
+#         gramsD = {k:v for (k,v) in gramsD.items() if v > 1} 
+#     print(gramsD)
+#     print(p)
+    gramsDall.append(gramsD)
+    if n <= pLengths[0]:
+        n+=1
+    else:
+        break
         
 
-allNgramsStrings = ([' '.join(e).lower() for e in allNgramsList])
+gramsDall = list(filter(None, gramsDall))
+gramsDall
+
+for d in gramsDall:
+    for k, v in d.items():
+        ''.join(k)
 
 
-gramsDict = {}
-for gram in allNgramsStrings:
-    count = allNgramsStrings.count(gram)
-    gramsDict[gram] = count
+gramsSwap = reduce(lambda a, b: {**a, **b}, gramsDall)
+# gramsSwap
 
-df = pd.DataFrame(list(gramsDict.items()),columns = ['Grams','Count'])
-df = df[df['Count'] > 1]
+# res = dict((v,k) for k,v in gramsSwap.items())
 
-df['String_Lengths'] = df['Grams'].str.len()
-df.sort_values( by = 'String_Lengths',  ascending=False)
-print(df)
-df.to_excel('nGrams.xlsx')
+
+#res
+
+stringList = list(gramsSwap.keys())
+stringList
+
+stringList = [list(elem) for elem in stringList]
+
+
+stringList
+
+    
+stringList = [' '.join(x) for x in stringList]
+
+
+for index, item in enumerate(stringList):
+    print(index, len(item.split(' ')), item)
+    
+Counter(stringList)
