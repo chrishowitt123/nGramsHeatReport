@@ -21,6 +21,12 @@ file = r"C:\Users\chris\Documents\Transgola\Clients\PROJECTS\2021\384180221_TM_J
 text = docx2txt.process(file)
 words = nltk.word_tokenize(text)
 
+paras = []
+
+for p in (text.split("\n")):
+    paras.append(p)
+    
+paras.sort(key=len,reverse=True)
 
 def ngrams(lst, n):
   tlst = lst
@@ -37,7 +43,7 @@ def ngrams(lst, n):
 
 n = 1
 
-while True:
+while n <= len(paras[0]):
 
     gramsD = dict(Counter(ngrams(words, n)))
     gramsD = {value:key for key, value in gramsD.items()}
