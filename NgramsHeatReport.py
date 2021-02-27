@@ -38,7 +38,7 @@ def ngrams(lst, n):
   
 
 
-n = 5
+n = 7
 
 
 gramsDall= []
@@ -49,9 +49,8 @@ gramsDall= []
 gramsD = dict(Counter(ngrams(words, n)))
 gramsD
 
-for key, value in gramsD.items():
-    if value > 3:
-        print(key, value)
+
+gramsD = {value:key for key, value in gramsD.items()}
         
-c = Counter(gramsD)
-pp.pprint(c.most_common())
+        
+dict(sorted(gramsD.items(), reverse=True))
