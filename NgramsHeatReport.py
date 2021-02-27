@@ -97,3 +97,7 @@ for index, item in enumerate(stringList):
     print(index, len(item.split(' ')), item)
     
 Counter(stringList)
+
+for (key, value) in gramsSwap.items():
+    if value > 0:
+        print(key, value)
