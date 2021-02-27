@@ -22,8 +22,6 @@ text = docx2txt.process(file)
 words = nltk.word_tokenize(text)
 
 
-
-
 def ngrams(lst, n):
   tlst = lst
   while True:
@@ -37,20 +35,18 @@ def ngrams(lst, n):
       break    
   
 
-
-n = 7
-
-
-gramsDall= []
-
-
-    
+n = 4
 
 gramsD = dict(Counter(ngrams(words, n)))
-gramsD
-
-
 gramsD = {value:key for key, value in gramsD.items()}
-        
-        
+gramsD = {key: list(value) for key, value in gramsD.items()}
+
+    
 dict(sorted(gramsD.items(), reverse=True))
+
+keys = list(gramsD.keys())
+values = list(gramsD.values())
+values = [' '.join(strings) for strings in values]
+
+gramsDJoin = dict(zip(keys, values)) 
+gramsDJoin
